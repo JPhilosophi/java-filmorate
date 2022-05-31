@@ -8,55 +8,53 @@ import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final List<User> users = new ArrayList<>();
-    private static final  Pattern LOGIN_PATTERN = Pattern.compile("^[A-Za-z]([\\\\.A-Za-z0-9-]{1,18})([A-Za-z0-9])$");
-    private Matcher loginMatcher;
+    private final Map<Integer, User> users = new HashMap<>();
 
     @GetMapping
-    public List<User> getUsers() {
-        return users;
+    public Collection<User> getUsers() {
+        return users.values();
     }
 
     @PostMapping
     public User create(@RequestBody User user) throws ValidationException {
-        loginMatcher = LOGIN_PATTERN.matcher(user.getLogin());
-        boolean loginMatches = loginMatcher.matches();
+        log.info("Запрос получен.");
         if (!EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Адрес электронной имеет не верный формат");
-        } else if (!loginMatches) {
+        } else if (user.getLogin().isEmpty() | user.getLogin().isBlank()) {
             throw new ValidationException("Логин не может быть пустым или содержать пробелы");
         } else if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Дата рождение не может быть текущей или будущей датой");
-        } else {
-            users.add(user);
+        } else if (user.getName().isEmpty() | user.getName().isBlank()) {
+            user.setName(user.getLogin());
         }
+        user.setId(users.size() + 1);
+        users.put(user.getId(), user);
         return user;
     }
 
     @PutMapping
     public User put(@RequestBody User user) throws ValidationException {
-        loginMatcher = LOGIN_PATTERN.matcher(user.getLogin());
-        boolean loginMatches = loginMatcher.matches();
+        log.info("Запрос получен.");
         if (!EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Адрес электронной имеет не верный формат");
-        } else if (!loginMatches) {
+        } else if (user.getLogin().isEmpty() | user.getLogin().isBlank()) {
             throw new ValidationException("Логин не может быть пустым или содержать пробелы");
-        } else if (users.contains(user.getLogin())) {
-            throw new ValidationException("Такой логин уже есть");
         } else if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Дата рождение не может быть текущей или будущей датой");
-        } else {
-            users.add(user);
+        } else if (user.getName().isEmpty() | user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        } else if (!users.containsKey(user.getId())) {
+            throw new ValidationException("Дата рождение не может быть текущей или будущей датой");
         }
+        users.put(user.getId(), user);
         return user;
     }
 }

@@ -10,7 +10,6 @@ public @Data class User {
     private String email;
     private String login;
     private String name;
-    //private LocalDateTime birthday;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 }

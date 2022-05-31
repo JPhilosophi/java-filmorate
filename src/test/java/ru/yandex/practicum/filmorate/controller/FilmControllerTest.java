@@ -6,11 +6,12 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class FilmControllerTest{
+public class FilmControllerTest {
 
     @Test
     public void testGetPostAndPutMethods() throws ValidationException {
@@ -19,11 +20,11 @@ public class FilmControllerTest{
         film.setId(1);
         film.setName("Star");
         film.setDescription("Some vanila film");
-        film.setReleaseDate(LocalDate.of(1990, 10,1));
+        film.setReleaseDate(LocalDate.of(1990, 10, 1));
         film.setDuration(Duration.ofMinutes(140));
         filmController.create(film);
-        List<Film> filmList = filmController.getFilms();
+        Collection<Film> filmList = filmController.getTop5Films();
         assertEquals(filmList.size(), 1);
-        assertEquals(filmList, filmController.getFilms());
+        assertTrue(filmController.getTop5Films().contains(film));
     }
 }
