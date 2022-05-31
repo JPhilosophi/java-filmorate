@@ -1,12 +1,12 @@
 package ru.yandex.practicum.filmorate.exeptions;
 
-public class InvalidBirthdayException extends Exception{
+public class ValidationException extends Exception{
 
-    public InvalidBirthdayException(){
+    public ValidationException(){
 
     }
 
-    public InvalidBirthdayException(final String message) {
+    public ValidationException(final String message) {
         super(message);
     }
 }
