@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody User user) throws ValidationException {
+    public User create(@Valid @RequestBody User user) throws ValidationException {
         log.info("Запрос получен.");
         if (!EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Адрес электронной имеет не верный формат");
