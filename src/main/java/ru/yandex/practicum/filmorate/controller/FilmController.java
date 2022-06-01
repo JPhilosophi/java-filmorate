@@ -21,13 +21,14 @@ public class FilmController {
     @GetMapping
     public Collection<Film> getTop5Films() {
         List<Film> rate = new ArrayList<>(films.values());
-        Collections.sort(rate);
+        Collections.reverse(rate);
         List<Film> sorted = new ArrayList<>();
         for (int i = 0 ; i < rate.size(); i++){
             if (i == 5) {
                 return sorted;
             }
             sorted.add(rate.get(i));
+            System.out.println(sorted.get(i));
         }
         return sorted;
     }
@@ -63,7 +64,6 @@ public class FilmController {
         } else if (!films.containsKey(film.getId())) {
             throw new ValidationException("Ошибка обновления фильма с " + film.getId() + "нет в базе");
         }
-        film.setId(films.size() + 1);
         films.put(film.getId(), film);
         return film;
     }
