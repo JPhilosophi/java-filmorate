@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -15,6 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@Validated
 @RequestMapping("/users")
 public class UserController {
     private final Map<Integer, User> users = new HashMap<>();
@@ -26,36 +27,31 @@ public class UserController {
 
     @PostMapping
     public User create(@Valid @RequestBody User user) throws ValidationException {
-        log.info("Запрос получен.");
-        if (!EmailValidator.getInstance().isValid(user.getEmail())) {
-            throw new ValidationException("Адрес электронной имеет не верный формат");
-        } else if (user.getLogin().isEmpty() | user.getLogin().isBlank()) {
-            throw new ValidationException("Логин не может быть пустым или содержать пробелы");
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            log.error("Birthday can't be in future or current date ");
             throw new ValidationException("Дата рождение не может быть текущей или будущей датой");
         } else if (user.getName().isEmpty() | user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         user.setId(users.size() + 1);
         users.put(user.getId(), user);
+        log.info("Operation success: Created new user" + user.getLogin());
         return user;
     }
 
     @PutMapping
-    public User put(@RequestBody User user) throws ValidationException {
-        log.info("Запрос получен.");
-        if (!EmailValidator.getInstance().isValid(user.getEmail())) {
-            throw new ValidationException("Адрес электронной имеет не верный формат");
-        } else if (user.getLogin().isEmpty() | user.getLogin().isBlank()) {
-            throw new ValidationException("Логин не может быть пустым или содержать пробелы");
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
+    public User put(@Valid @RequestBody User user) throws ValidationException {
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            log.error("Birthday can't be in future or current date ");
             throw new ValidationException("Дата рождение не может быть текущей или будущей датой");
         } else if (user.getName().isEmpty() | user.getName().isBlank()) {
             user.setName(user.getLogin());
         } else if (!users.containsKey(user.getId())) {
-            throw new ValidationException("Дата рождение не может быть текущей или будущей датой");
+            log.error("User with " + " " + user.getId() + " not in the system ");
+            throw new ValidationException("Пользователь с " + user.getId() + " уже есть в системе");
         }
         users.put(user.getId(), user);
+        log.info("Operation success: User updated " + user.getLogin());
         return user;
     }
 }
