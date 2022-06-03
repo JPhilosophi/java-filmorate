@@ -6,16 +6,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.DurationDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.DurationSerializer;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Duration;
 import java.time.LocalDate;
 
-public @Data
-class Film {
+@Data
+public class Film {
     private int id;
-    @NotNull
     @NotBlank
     private String name;
     private String description;
