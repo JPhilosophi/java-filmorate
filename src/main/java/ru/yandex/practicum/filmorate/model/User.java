@@ -1,16 +1,16 @@
 package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-public @Data
-class User {
-    private int id;
+@Data
+public class User {
+    private int id = 0;
     @Email(message = "Incorrect email format")
     @NotNull(message = "Please enter email")
     @NotEmpty(message = "Please enter email")
@@ -20,4 +20,8 @@ class User {
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+
+    public void getNextId() {
+        id++;
+    }
 }

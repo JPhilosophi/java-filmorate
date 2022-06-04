@@ -1,13 +1,14 @@
 package ru.yandex.practicum.filmorate.controller;
 
 
-import jakarta.validation.Valid;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class UserController {
         } else if (user.getName().isEmpty() | user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
-        user.setId(users.size() + 1);
+        user.getNextId();
         users.put(user.getId(), user);
         log.info("Operation success: Created new user" + user.getLogin());
         return user;
@@ -48,7 +49,7 @@ public class UserController {
             user.setName(user.getLogin());
         } else if (!users.containsKey(user.getId())) {
             log.error("User with " + " " + user.getId() + " not in the system ");
-            throw new ValidationException("Пользователь с " + user.getId() + " уже есть в системе");
+            throw new ValidationException("Пользователь с " + user.getId() + " нет в системе");
         }
         users.put(user.getId(), user);
         log.info("Operation success: User updated " + user.getLogin());
