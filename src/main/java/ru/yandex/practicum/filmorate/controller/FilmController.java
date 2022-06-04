@@ -41,7 +41,7 @@ public class FilmController {
             log.error("Error: movie duration cannot be negative or equal to 0");
             throw new ValidationException("Продолжительность фильма не может быть отрицательной");
         }
-        film.setId(films.size() + 1);
+        film.getNextId();
         films.put(film.getId(), film);
         log.info("Operation success: Saved create new object" + film.getName());
         return film;

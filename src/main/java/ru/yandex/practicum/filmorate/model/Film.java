@@ -24,4 +24,7 @@ public class Film {
     private Duration duration;
     private int rate;
 
+    public void getNextId() {
+        id++;
+    }
 }
