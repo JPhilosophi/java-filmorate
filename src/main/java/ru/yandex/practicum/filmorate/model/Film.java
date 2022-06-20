@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 @Data
 public class Film {
+    private static int count = 1;
     private int id;
     @NotBlank
     private String name;
@@ -25,6 +26,6 @@ public class Film {
     private int rate;
 
     public void getNextId() {
-        id++;
+        id = count++;
     }
 }

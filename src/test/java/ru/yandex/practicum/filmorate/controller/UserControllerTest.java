@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exeption.ValidationException;
+import ru.yandex.practicum.filmorate.exeption.user.DateOfBirthCannotBeInTheFutureException;
+import ru.yandex.practicum.filmorate.exeption.user.UserDoesntExistException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
@@ -12,33 +14,37 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserControllerTest {
     private User user = new User();
-    private UserController userController = new UserController();
+    private final InMemoryUserStorage userStorage;
+
+    public UserControllerTest(InMemoryUserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
 
     @Test
-    public void successCreateUser() throws ValidationException {
+    public void successCreateUser() {
         user.setId(1);
         user.setName("Name");
         user.setLogin("Login");
         user.setBirthday(LocalDate.of(1900, 12, 30));
         user.setEmail("mail.mail@com");
-        assertNotNull(userController.create(user));
+        assertNotNull(userStorage.add(user));
     }
 
     @Test
-    public void successUpdateUser() throws ValidationException {
+    public void successUpdateUser() {
         user.setId(1);
         user.setName("Name");
         user.setLogin("Login");
         user.setBirthday(LocalDate.of(1900, 12, 30));
         user.setEmail("mail.mail@com");
-        assertNotNull(userController.create(user));
+        assertNotNull(userStorage.add(user));
         user.setId(1);
         user.setName("Name2");
         user.setLogin("Login2");
         user.setBirthday(LocalDate.of(1900, 12, 30));
         user.setEmail("mail2.mail@com");
-        assertNotNull(userController.put(user));
+        assertNotNull(userStorage.update(user));
     }
 
     @Test
@@ -48,7 +54,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.now());
         user.setEmail("mail.mail@com");
-        assertThrows(ValidationException.class, () -> userController.create(user));
+        assertThrows(DateOfBirthCannotBeInTheFutureException.class, () -> userStorage.add(user));
     }
 
     @Test
@@ -57,7 +63,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.now());
         user.setEmail("mail.mail@com");
-        assertThrows(ValidationException.class, () -> userController.put(user));
+        assertThrows(UserDoesntExistException.class, () -> userStorage.update(user));
     }
 }
 

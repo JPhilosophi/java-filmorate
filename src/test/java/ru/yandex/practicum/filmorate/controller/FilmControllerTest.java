@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -12,7 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FilmControllerTest {
     private final Film film = new Film();
-    private final FilmController filmController = new FilmController();
+    private final InMemoryFilmStorage filmStorage;
+
+    public FilmControllerTest(InMemoryFilmStorage filmStorage) {
+        this.filmStorage = filmStorage;
+    }
 
     @Test
     public void successCreateFilm() throws ValidationException {
@@ -21,7 +26,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
         film.setDuration(Duration.ofMinutes(140));
         film.setDescription("some film");
-        assertNotNull(filmController.create(film));
+        assertNotNull(filmStorage.add(film));
     }
 
     @Test
@@ -31,13 +36,13 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
         film.setDuration(Duration.ofMinutes(140));
         film.setDescription("some film");
-        filmController.create(film);
+        filmStorage.add(film);
         film.setId(1);
         film.setName("Strange 2");
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
         film.setDuration(Duration.ofMinutes(140));
         film.setDescription("some film 2");
-        assertNotNull(filmController.update(film));
+        assertNotNull(filmStorage.update(film));
     }
 
     @Test
@@ -49,7 +54,7 @@ public class FilmControllerTest {
         film.setDescription("asdadsdqwdqwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12" +
                 "asdadsdqwdqwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12asdadsdqwd" +
                 "qwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12");
-        assertThrows(ValidationException.class, () -> filmController.create(film));
+        assertThrows(ValidationException.class, () -> filmStorage.add(film));
     }
 
     @Test
@@ -59,7 +64,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
         film.setDuration(Duration.ofMinutes(140));
         film.setDescription("some film 2");
-        assertThrows(ValidationException.class, () -> filmController.create(film));
+        assertThrows(ValidationException.class, () -> filmStorage.add(film));
     }
 
     @Test
@@ -69,7 +74,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
         film.setDuration(Duration.ofMinutes(-140));
         film.setDescription("some film 2");
-        assertThrows(ValidationException.class, () -> filmController.create(film));
+        assertThrows(ValidationException.class, () -> filmStorage.add(film));
     }
 
     @Test
@@ -79,6 +84,6 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
         film.setDuration(Duration.ofMinutes(-140));
         film.setDescription("some film 2");
-        assertThrows(ValidationException.class, () -> filmController.update(film));
+        assertThrows(ValidationException.class, () -> filmStorage.update(film));
     }
 }

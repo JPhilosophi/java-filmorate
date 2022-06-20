@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 @Data
 public class User {
+    private static int count = 1;
     private int id = 0;
     @Email(message = "Incorrect email format")
     @NotNull(message = "Please enter email")
@@ -22,6 +23,6 @@ public class User {
     private LocalDate birthday;
 
     public void getNextId() {
-        id++;
+        id = count++;
     }
 }
