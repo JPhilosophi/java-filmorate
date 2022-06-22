@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -71,8 +71,15 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Stream<Film> getPopularFilms() {
-        return films.values().stream().sorted(Comparator.comparing(Film::getRate));
+    public List<Film> getPopularFilms(Integer count) {
+        if (count == null) {
+            return films.values().stream().sorted(Comparator.comparing(Film::getRate)).collect(Collectors.toList());
+        }
+        Map<Integer, Set<Integer>> result = new TreeMap<Integer, Set<Integer>>(likes);
+        return result.keySet().stream()
+                .map(films::get)
+                .limit(Objects.requireNonNullElse(count, 10))
+                .collect(Collectors.toList());
     }
 
     public Film getFilmById(Integer filmId) {
@@ -85,5 +92,21 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     public void addLike(Integer filmId, Integer userId) {
 
+       if (!likes.containsKey(filmId)) {
+           likes.put(filmId, new HashSet<>());
+       } likes.get(filmId).add(userId);
+    }
+
+    public void deleteLike(Integer filmId, Integer userId) {
+        checkLikes(filmId);
+        likes.get(filmId).remove(userId);
+    }
+
+    public void checkLikes(Integer id) {
+        if(!likes.containsKey(id)){
+            throw new FilmDoesntHaveEnyLikes("Films doesn't have any likes");
+        }
     }
 }
+
+

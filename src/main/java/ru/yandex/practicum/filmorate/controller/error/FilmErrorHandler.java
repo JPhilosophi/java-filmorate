@@ -39,4 +39,10 @@ public class FilmErrorHandler {
     public ErrorResponse  handleIncorrectFilmId(final FilmIncorrectId e) {
         return new ErrorResponse("Error: incorrect film id  " + e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse  handleDoesntHaveLikes(final FilmDoesntHaveEnyLikes e) {
+        return new ErrorResponse("Error: films doesn't have any likes  " + e.getMessage());
+    }
 }

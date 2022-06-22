@@ -1,7 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exeption.ValidationException;
+import ru.yandex.practicum.filmorate.exeption.film.FilmDateException;
+import ru.yandex.practicum.filmorate.exeption.film.FilmDescriptionException;
+import ru.yandex.practicum.filmorate.exeption.film.FilmDoesntExistException;
+import ru.yandex.practicum.filmorate.exeption.film.FilmDurationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
@@ -20,7 +23,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void successCreateFilm() throws ValidationException {
+    public void successCreateFilm() {
         film.setId(1);
         film.setName("Strange");
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
@@ -30,7 +33,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void successUpdateFilm() throws ValidationException {
+    public void successUpdateFilm() {
         film.setId(1);
         film.setName("Strange");
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
@@ -54,7 +57,7 @@ public class FilmControllerTest {
         film.setDescription("asdadsdqwdqwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12" +
                 "asdadsdqwdqwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12asdadsdqwd" +
                 "qwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12");
-        assertThrows(ValidationException.class, () -> filmStorage.add(film));
+        assertThrows(FilmDescriptionException.class, () -> filmStorage.add(film));
     }
 
     @Test
@@ -64,7 +67,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
         film.setDuration(Duration.ofMinutes(140));
         film.setDescription("some film 2");
-        assertThrows(ValidationException.class, () -> filmStorage.add(film));
+        assertThrows(FilmDateException.class, () -> filmStorage.add(film));
     }
 
     @Test
@@ -74,7 +77,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
         film.setDuration(Duration.ofMinutes(-140));
         film.setDescription("some film 2");
-        assertThrows(ValidationException.class, () -> filmStorage.add(film));
+        assertThrows(FilmDurationException.class, () -> filmStorage.add(film));
     }
 
     @Test
@@ -84,6 +87,6 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
         film.setDuration(Duration.ofMinutes(-140));
         film.setDescription("some film 2");
-        assertThrows(ValidationException.class, () -> filmStorage.update(film));
+        assertThrows(FilmDoesntExistException.class, () -> filmStorage.update(film));
     }
 }

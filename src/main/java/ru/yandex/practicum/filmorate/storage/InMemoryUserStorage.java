@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -94,7 +93,8 @@ public class InMemoryUserStorage implements UserStorage{
         checkUserExist(userId);
         Set<Integer> friendIds = friends.getOrDefault(userId, Collections.emptySet());
         return friendIds.stream()
-                .map(x -> users.get(x)).collect(Collectors.toList());
+                //здесь заменил выражение -> (x -> users.get(x))
+                .map(users::get).collect(Collectors.toList());
     }
 
     public List<User> getCommonFriendList(Integer userId, Integer otherId) {
@@ -117,7 +117,4 @@ public class InMemoryUserStorage implements UserStorage{
         }
     }
 
-    private void checkId(Integer id) {
-
-    }
 }
