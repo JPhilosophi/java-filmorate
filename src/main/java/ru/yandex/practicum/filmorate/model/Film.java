@@ -24,8 +24,4 @@ public class Film {
     @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
     private Duration duration;
     private int rate;
-
-    public void getNextId() {
-        id = count++;
-    }
 }

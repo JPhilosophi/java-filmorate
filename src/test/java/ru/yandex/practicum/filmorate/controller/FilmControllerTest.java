@@ -29,7 +29,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
         film.setDuration(Duration.ofMinutes(140));
         film.setDescription("some film");
-        assertNotNull(filmStorage.add(film));
+        assertNotNull(filmStorage.save(film));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
         film.setDuration(Duration.ofMinutes(140));
         film.setDescription("some film");
-        filmStorage.add(film);
+        filmStorage.save(film);
         film.setId(1);
         film.setName("Strange 2");
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
@@ -57,7 +57,7 @@ public class FilmControllerTest {
         film.setDescription("asdadsdqwdqwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12" +
                 "asdadsdqwdqwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12asdadsdqwd" +
                 "qwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12");
-        assertThrows(FilmDescriptionException.class, () -> filmStorage.add(film));
+        assertThrows(FilmDescriptionException.class, () -> filmStorage.save(film));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
         film.setDuration(Duration.ofMinutes(140));
         film.setDescription("some film 2");
-        assertThrows(FilmDateException.class, () -> filmStorage.add(film));
+        assertThrows(FilmDateException.class, () -> filmStorage.save(film));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
         film.setDuration(Duration.ofMinutes(-140));
         film.setDescription("some film 2");
-        assertThrows(FilmDurationException.class, () -> filmStorage.add(film));
+        assertThrows(FilmDurationException.class, () -> filmStorage.save(film));
     }
 
     @Test
