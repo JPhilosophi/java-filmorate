@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exeption.user.DateOfBirthCannotBeInTheFutureException;
-import ru.yandex.practicum.filmorate.exeption.user.UserDoesntExistException;
+import ru.yandex.practicum.filmorate.exeption.BadRequestException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class UserControllerTest {
-    private User user = new User();
+    private final User user = new User();
     private final InMemoryUserStorage userStorage;
 
     public UserControllerTest(InMemoryUserStorage userStorage) {
@@ -28,7 +27,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.of(1900, 12, 30));
         user.setEmail("mail.mail@com");
-        assertNotNull(userStorage.add(user));
+        assertNotNull(userStorage.create(user));
     }
 
     @Test
@@ -38,7 +37,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.of(1900, 12, 30));
         user.setEmail("mail.mail@com");
-        assertNotNull(userStorage.add(user));
+        assertNotNull(userStorage.create(user));
         user.setId(1);
         user.setName("Name2");
         user.setLogin("Login2");
@@ -54,7 +53,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.now());
         user.setEmail("mail.mail@com");
-        assertThrows(DateOfBirthCannotBeInTheFutureException.class, () -> userStorage.add(user));
+        assertThrows(BadRequestException.class, () -> userStorage.create(user));
     }
 
     @Test
@@ -63,7 +62,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.now());
         user.setEmail("mail.mail@com");
-        assertThrows(UserDoesntExistException.class, () -> userStorage.update(user));
+        assertThrows(BadRequestException.class, () -> userStorage.update(user));
     }
 }
 

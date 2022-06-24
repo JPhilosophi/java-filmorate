@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exeption.film.FilmDoesntHaveEnyLikes;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
@@ -52,14 +51,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     public void deleteLike(Integer filmId, Integer userId) {
-        checkLikes(filmId);
         likes.get(filmId).remove(userId);
-    }
-
-    public void checkLikes(Integer id) {
-        if(!likes.containsKey(id)){
-            throw new FilmDoesntHaveEnyLikes("Films doesn't have any likes");
-        }
     }
 
     public int getNextId() {
