@@ -3,8 +3,12 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+<<<<<<< HEAD
 import ru.yandex.practicum.filmorate.exeption.BadRequestException;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
+=======
+import ru.yandex.practicum.filmorate.exeption.film.*;
+>>>>>>> origin/add-friends-likes
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
@@ -68,28 +72,44 @@ public class FilmService {
     }
 
     public void deleteLike(Integer filmId, Integer userId) {
+<<<<<<< HEAD
         checkLikes(filmId);
+=======
+>>>>>>> origin/add-friends-likes
         filmStorage.deleteLike(filmId, userId);
     }
 
     private void checkingFilmOnCreate(Film film) {
         if (film.getDescription().length() > 200) {
+<<<<<<< HEAD
             throw new BadRequestException("Movie description cannot exceed 200 characters");
         } else if (film.getReleaseDate().isBefore(TIME)) {
             throw new BadRequestException("movies date cannot be earlier" + TIME);
         } else if (film.getDuration().isNegative()) {
             throw new BadRequestException("movie duration cannot be negative or equal to 0");
+=======
+            throw new FilmDescriptionException("Movie description cannot exceed 200 characters");
+        } else if (film.getReleaseDate().isBefore(TIME)) {
+            throw new FilmDateException("movies date cannot be earlier" + TIME);
+        } else if (film.getDuration().isNegative()) {
+            throw new FilmDurationException("movie duration cannot be negative or equal to 0");
+>>>>>>> origin/add-friends-likes
         }
     }
 
     private void checkingFilmOnUpdate(Film film) {
         if (!filmStorage.getFilms().containsKey(film.getId())) {
+<<<<<<< HEAD
             throw new NotFoundException(" movie with " + film.getId() + " is not in the database");
+=======
+            throw new FilmDoesntExistException(" movie with " + film.getId() + " is not in the database");
+>>>>>>> origin/add-friends-likes
         }
     }
 
     private void checkingAvailabilityFilm(Integer filmId) {
         if (!filmStorage.getFilms().containsKey(filmId)) {
+<<<<<<< HEAD
             throw new NotFoundException( " movie with " + filmId + " is not in the database");
         }
     }
@@ -97,6 +117,9 @@ public class FilmService {
     public void checkLikes(Integer id) {
         if(!filmStorage.getLikes().containsKey(id)){
             throw new NotFoundException("Films doesn't have any likes" + id);
+=======
+            throw new FilmIncorrectId( " movie with " + filmId + " is not in the database");
+>>>>>>> origin/add-friends-likes
         }
     }
 

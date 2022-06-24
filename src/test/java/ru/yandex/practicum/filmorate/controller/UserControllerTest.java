@@ -1,7 +1,8 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exeption.BadRequestException;
+import ru.yandex.practicum.filmorate.exeption.user.DateOfBirthCannotBeInTheFutureException;
+import ru.yandex.practicum.filmorate.exeption.user.UserDoesntExistException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
@@ -27,7 +28,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.of(1900, 12, 30));
         user.setEmail("mail.mail@com");
-        assertNotNull(userStorage.create(user));
+        assertNotNull(userStorage.add(user));
     }
 
     @Test
@@ -37,7 +38,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.of(1900, 12, 30));
         user.setEmail("mail.mail@com");
-        assertNotNull(userStorage.create(user));
+        assertNotNull(userStorage.add(user));
         user.setId(1);
         user.setName("Name2");
         user.setLogin("Login2");
@@ -53,7 +54,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.now());
         user.setEmail("mail.mail@com");
-        assertThrows(BadRequestException.class, () -> userStorage.create(user));
+        assertThrows(DateOfBirthCannotBeInTheFutureException.class, () -> userStorage.add(user));
     }
 
     @Test
@@ -62,7 +63,7 @@ public class UserControllerTest {
         user.setLogin("Login");
         user.setBirthday(LocalDate.now());
         user.setEmail("mail.mail@com");
-        assertThrows(BadRequestException.class, () -> userStorage.update(user));
+        assertThrows(UserDoesntExistException.class, () -> userStorage.update(user));
     }
 }
 
