@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class UserControllerTest {
-    private User user = new User();
+    private final User user = new User();
     private final InMemoryUserStorage userStorage;
 
     public UserControllerTest(InMemoryUserStorage userStorage) {

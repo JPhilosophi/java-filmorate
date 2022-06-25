@@ -51,7 +51,7 @@ public class FilmService {
                     .sorted(Comparator.comparing(Film::getRate))
                     .collect(Collectors.toList());
         }
-        Map<Integer, Set<Integer>> result = new TreeMap<Integer, Set<Integer>>(filmStorage.getLikes());
+        Map<Integer, Set<Integer>> result = new TreeMap<>(filmStorage.getLikes());
         return result.keySet().stream()
                 .map(filmStorage.getFilms()::get)
                 .limit(Objects.requireNonNullElse(count, 10))
