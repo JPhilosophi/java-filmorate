@@ -1,10 +1,10 @@
 # java-filmorate
 Template repository for Filmorate project.
 
-##Images ER diagram
+### Images ER diagram
 ![Link on ER-diagram ->](ER/ER_diagramma.png)
 
-###Examples SQL requests
+### Examples SQL requests
 #### Получение списка друзей /{id}/friends]
    
     SELECT
