@@ -1,7 +1,8 @@
 # java-filmorate
 Template repository for Filmorate project.
 
-![Link on ER-diagramm ->](https://app.quickdatabasediagrams.com/#/ "ER diagramm")
+##Images ER diagram
+![Link on ER-diagram ->](ER/ER_diagramma.png)
 
 ###Examples SQL requests
 #### Получение списка друзей /{id}/friends]
