@@ -2,7 +2,7 @@
 Template repository for Filmorate project.
 
 ### Images ER diagram
-![Link on ER-diagram ->](ER/ER_diagramma.png)
+![Link on ER-diagram ->](ER/ER-diagram.png)
 
 ### Examples SQL requests
 #### Получение списка друзей /{id}/friends]
