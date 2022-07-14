@@ -24,7 +24,7 @@ public class FilmControllerTest {
         film.setId(1);
         film.setName("Strange");
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
-        film.setDuration(Duration.ofMinutes(140));
+        film.setDuration(140);
         film.setDescription("some film");
         assertNotNull(filmStorage.save(film));
     }
@@ -34,13 +34,13 @@ public class FilmControllerTest {
         film.setId(1);
         film.setName("Strange");
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
-        film.setDuration(Duration.ofMinutes(140));
+        film.setDuration(140);
         film.setDescription("some film");
         filmStorage.save(film);
         film.setId(1);
         film.setName("Strange 2");
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
-        film.setDuration(Duration.ofMinutes(140));
+        film.setDuration(140);
         film.setDescription("some film 2");
         assertNotNull(filmStorage.update(film));
     }
@@ -50,7 +50,7 @@ public class FilmControllerTest {
         film.setId(1);
         film.setName("Strange");
         film.setReleaseDate(LocalDate.of(1895, 12, 30));
-        film.setDuration(Duration.ofMinutes(140));
+        film.setDuration(140);
         film.setDescription("asdadsdqwdqwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12" +
                 "asdadsdqwdqwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12asdadsdqwd" +
                 "qwdwqedwqee232132bie12b3i21b321hk3b213b21h321h4v2k14b2k14b2k1j4bh214h21v4hvk12");
@@ -62,7 +62,7 @@ public class FilmControllerTest {
         film.setId(1);
         film.setName("Strange");
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
-        film.setDuration(Duration.ofMinutes(140));
+        film.setDuration(140);
         film.setDescription("some film 2");
         assertThrows(BadRequestException.class, () -> filmStorage.save(film));
     }
@@ -72,7 +72,7 @@ public class FilmControllerTest {
         film.setId(1);
         film.setName("Strange");
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
-        film.setDuration(Duration.ofMinutes(-140));
+        film.setDuration(-140);
         film.setDescription("some film 2");
         assertThrows(BadRequestException.class, () -> filmStorage.save(film));
     }
@@ -82,7 +82,7 @@ public class FilmControllerTest {
         film.setId(1);
         film.setName("Strange");
         film.setReleaseDate(LocalDate.of(1895, 12, 1));
-        film.setDuration(Duration.ofMinutes(-140));
+        film.setDuration(-140);
         film.setDescription("some film 2");
         assertThrows(BadRequestException.class, () -> filmStorage.update(film));
     }

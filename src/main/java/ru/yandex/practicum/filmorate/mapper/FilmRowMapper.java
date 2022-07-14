@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.model.MpaRating;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
@@ -24,10 +23,10 @@ public class FilmRowMapper implements RowMapper {
         ZoneId defaultZoneId = ZoneId.systemDefault();
         Instant instant = date.toInstant();
         film.setReleaseDate(instant.atZone(defaultZoneId).toLocalDate());
-        film.setDuration(Duration.ofMinutes(rs.getInt("DURATION")));
+        film.setDuration(rs.getInt("DURATION"));
         film.setRate(rs.getInt("RATE"));
         MpaRating mpaRating = new MpaRating();
-        mpaRating.setId(rs.getInt("RATING_ID"));
+        mpaRating.setId(rs.getInt("MPA_RATING"));
         film.setMpaRating(mpaRating);
         List<Genre> genres = film.getGenres();
         return film;

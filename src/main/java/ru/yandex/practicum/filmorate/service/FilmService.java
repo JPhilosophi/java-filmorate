@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeption.BadRequestException;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
@@ -79,7 +78,9 @@ public class FilmService {
             throw new BadRequestException("Movie description cannot exceed 200 characters");
         } else if (film.getReleaseDate().isBefore(TIME)) {
             throw new BadRequestException("movies date cannot be earlier" + TIME);
-        } else if (film.getDuration().isNegative()) {
+        } else if (film.getDuration() < 0) {
+            throw new BadRequestException("movie duration cannot be negative or equal to 0");
+        } else if (film.getMpaRating() == null) {
             throw new BadRequestException("movie duration cannot be negative or equal to 0");
         }
     }

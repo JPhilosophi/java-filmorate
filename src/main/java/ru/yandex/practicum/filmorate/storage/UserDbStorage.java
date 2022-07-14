@@ -31,6 +31,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User create(User user) {
+        user.getNextId();
         checkingUserOnCreate(user);
         jdbcTemplate.update("insert into users (login,name, birthday, email) values (?,?,?,?);"
                 ,user.getLogin(), user.getName(), user.getBirthday(), user.getEmail());
@@ -66,8 +67,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void addFriend(Integer id, Integer friendId) {
-        jdbcTemplate.update("insert into FRIENDS (USER_ID,FRIEND_ID) values (?,?);"
-                ,id, friendId);
+        jdbcTemplate.update("insert into FRIENDS (USER_ID,FRIEND_ID, STATUS) values (?,?,?);"
+                ,id, friendId, 1);
     }
 
     @Override

@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.mapper.GenreRowMapper;
+import ru.yandex.practicum.filmorate.mapper.UserRowMapper;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.sql.ResultSet;
@@ -19,9 +21,9 @@ public class GenreDbStorage {
     }
 
     public Genre getGenreById (Integer id) {
-        List<Genre> genres = jdbcTemplate.query("SELECT * FROM GENRE WHERE ID = ?",
-                (rs, rowNum) -> getGenreFromRS(rs), id);
-        Genre genre = genres.get(0);
+        Genre genre = (Genre) jdbcTemplate.queryForObject("SELECT * FROM GENRE WHERE ID = ?",
+                new GenreRowMapper(),
+                id);
         return genre;
     }
 

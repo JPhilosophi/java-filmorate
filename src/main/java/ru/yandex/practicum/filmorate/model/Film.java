@@ -1,15 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.DurationDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.DurationSerializer;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,13 +15,14 @@ public class Film {
     private String name;
     private String description;
     private LocalDate releaseDate;
-    @JsonSerialize(using = DurationSerializer.class)
-    @JsonDeserialize(using = DurationDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
-    private Duration duration;
+    private Integer duration;
     private int rate;
     @JsonProperty("mpa")
     private MpaRating mpaRating;
     @JsonProperty("genres")
     private List<Genre> genres;
+
+    public void getNextId() {
+        id = count++;
+    }
 }

@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class MpaRating {
     private int id;
-    private String mpaRating;
+    private String name;
 }
