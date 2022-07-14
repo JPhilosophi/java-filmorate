@@ -117,8 +117,14 @@ public class FilmDbStorage implements FilmStorage{
     @Override
     public Map<Integer, Set<Integer>> getLikes() {
         Map<Integer, Set<Integer>> likes = new HashMap<>();
-        jdbcTemplate.query("SELECT * FROM FILM_LIKES WHERE FILM_ID = ? GROUP BY FILM_ID", (rs, rowNum) -> {
-            likes.put(rs.getInt("FILM_ID"), (Set<Integer>) rs.getArray("USER_ID"));
+        jdbcTemplate.query("SELECT FILM_ID, USER_ID FROM FILM_LIKES",
+                (rs, rowNum) -> {
+                    Integer filmId = rs.getInt("FILM_ID");
+                    Integer userId = rs.getInt("USER_ID");
+                    if (!likes.containsKey(filmId)) {
+                        likes.put(filmId, new HashSet<>());
+                    }
+                    likes.get(filmId).add(userId);
             return null;
         });
         return likes;
