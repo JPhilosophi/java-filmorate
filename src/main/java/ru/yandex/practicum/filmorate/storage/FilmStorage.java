@@ -15,4 +15,8 @@ public interface FilmStorage {
     Map<Integer, Film> getFilms();
 
     Map<Integer, Set<Integer>> getLikes();
+
+    void addLike(Integer filmId, Integer userId);
+
+    void deleteLike(Integer filmId, Integer userId);
 }

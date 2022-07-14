@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-@Component
+@Component("inMemoryFilmStorage")
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private final Map<Integer, Set<Integer>> likes = new HashMap<>();
@@ -44,12 +44,14 @@ public class InMemoryFilmStorage implements FilmStorage {
         return likes;
     }
 
+    @Override
     public void addLike(Integer filmId, Integer userId) {
         if (!likes.containsKey(filmId)) {
            likes.put(filmId, new HashSet<>());
        } likes.get(filmId).add(userId);
     }
 
+    @Override
     public void deleteLike(Integer filmId, Integer userId) {
         likes.get(filmId).remove(userId);
     }
