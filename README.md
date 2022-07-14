@@ -5,12 +5,17 @@ Template repository for Filmorate project.
 ![Link on ER-diagram ->](ER/ER-diagram.png)
 
 ### Examples SQL requests
+#### Добавление фильмов /films
+INSERT INTO FILMS (ID, NAME, DESCRIPTION, RELEASE_DATE, DURATION, RATE, MPA_RATING)
+VALUES (?, ?, ?, ?, ?, ?, ?)
+                
 #### Получение списка друзей /{id}/friends]
    
-    SELECT
-        f.friend_id
-    FROM friend AS f
-    WHERE user_id = 1`
+      SELECT u.id, u.login, u.name, u.BIRTHDAY, u.EMAIL FROM friends AS fr
+      LEFT JOIN users AS u
+      ON fr.friend_id = u.id
+      WHERE fr.user_id = ?
+      AND fr.STATUS = 1
 
 #### Получение общих друзей
 
