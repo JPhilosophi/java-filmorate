@@ -20,6 +20,10 @@ public class GenreService {
     }
 
     public Genre getById (Integer id) {
+        if (id < 1) {
+            log.error("Not found mpa with " + id);
+            throw new NotFoundException("Error: can't found");
+        }
         if (genreDbStorage.getGenreById(id) == null) {
             log.error("Not found mpa with " + id);
             throw new NotFoundException("Error: can't found");

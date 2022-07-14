@@ -20,7 +20,10 @@ public class MpaService {
     }
 
     public MpaRating getById (Integer id) {
-        if (mpaDbStorage.getMpaById(id) == null) {
+        if (id < 0) {
+            log.error("Not found mpa with " + id);
+            throw new NotFoundException("Error: can't found");
+        } else if (mpaDbStorage.getMpaById(id) == null) {
             log.error("Not found mpa with " + id);
             throw new NotFoundException("Error: can't found");
         }

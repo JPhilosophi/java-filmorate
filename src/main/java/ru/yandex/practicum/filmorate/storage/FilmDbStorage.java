@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmRowMapper;
+import ru.yandex.practicum.filmorate.mapper.UserRowMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MpaRating;
@@ -41,7 +42,7 @@ public class FilmDbStorage implements FilmStorage{
                 mpaRating.getId());
         Optional.ofNullable(film.getGenres()).ifPresent(genres -> {
             jdbcTemplate.batchUpdate(
-                    "INSERT INTO FILM_GENRES(FILM_ID, GENRE_ID) VALUES ( ?,? )",
+                    "INSERT INTO FILM_GENRES(FILM_ID, GENRE_ID) VALUES (?, ?)",
                     genres,
                     genres.size(),
                     (ps, item) -> {
@@ -67,16 +68,18 @@ public class FilmDbStorage implements FilmStorage{
         jdbcTemplate.update(SQL,  film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(),
                 film.getRate(), mpaRating.getId(), film.getId());
         Optional.ofNullable(film.getGenres()).ifPresent(genres -> {
+            jdbcTemplate.update("DELETE FROM FILM_GENRES WHERE FILM_ID = ?", film.getId());
+            Set<Genre> genreSet = new HashSet<>(genres);
             jdbcTemplate.batchUpdate(
-                    "INSERT INTO FILM_GENRES(FILM_ID, GENRE_ID) VALUES ( ?,? )",
-                    genres,
-                    genres.size(),
+                    "INSERT INTO FILM_GENRES(FILM_ID, GENRE_ID) VALUES (?, ?)",
+                    genreSet,
+                    genreSet.size(),
                     (ps, item) -> {
                         ps.setInt(1, film.getId());
                         ps.setInt(2, item.getId());
                     });
         });
-        return film;
+        return getFilmById(film.getId());
     }
 
     @Override
@@ -99,7 +102,7 @@ public class FilmDbStorage implements FilmStorage{
         });
         //Существует ли более изящный способ?
         jdbcTemplate.query("SELECT FILM_ID, GENRE_ID, G2.NAME FROM FILM_GENRES " +
-                "LEFT JOIN GENRE G2 on G2.ID = FILM_GENRES.GENRE_ID GROUP BY FILM_ID", (rs, rowNum) -> {
+                "LEFT JOIN GENRE G2 on G2.ID = FILM_GENRES.GENRE_ID ", (rs, rowNum) -> {
             Integer id = rs.getInt("FILM_ID");
             Film film = result.get(id);
             if (film.getGenres() == null){
@@ -149,6 +152,32 @@ public class FilmDbStorage implements FilmStorage{
             log.error("Not found user" + " " + film1.getId());
             throw new NotFoundException("Error: can't found user" + film1.getId());
         }
+    }
+
+    private Film getFilmById (Integer filmId) {
+        Map<Integer, Film> result = new HashMap<>();
+        jdbcTemplate.query("SELECT F.ID, F.NAME, F.DESCRIPTION, F.RELEASE_DATE, F.DURATION, F.RATE, MR.ID AS MPA_ID, MR.MPA_RATING " +
+                        "FROM FILMS F " +
+                        "LEFT JOIN MPA_RATING MR on MR.ID = F.MPA_RATING WHERE F.ID = ?",
+                (rs, rowNum) -> {
+                    Film film = getFilmFromRS(rs);
+                    result.put(film.getId(), film);
+                    return null;
+                }, filmId);
+        jdbcTemplate.query("SELECT FILM_ID, GENRE_ID, G2.NAME FROM FILM_GENRES " +
+                "LEFT JOIN GENRE G2 on G2.ID = FILM_GENRES.GENRE_ID  WHERE FILM_ID = ?", (rs, rowNum) -> {
+            Integer id = rs.getInt("FILM_ID");
+            Film film = result.get(id);
+            if (film.getGenres() == null){
+                film.setGenres(new ArrayList<>());
+            }
+            Genre genre = new Genre();
+            genre.setId(rs.getInt("GENRE_ID"));
+            genre.setName(rs.getString("NAME"));
+            film.getGenres().add(genre);
+            return null;
+        }, filmId);
+        return result.get(filmId);
     }
 
     private static Film getFilmFromRS(ResultSet rs) throws SQLException {

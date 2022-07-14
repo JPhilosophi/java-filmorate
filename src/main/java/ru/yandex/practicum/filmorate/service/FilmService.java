@@ -33,7 +33,8 @@ public class FilmService {
     public Film update(Film film) {
         checkingFilmOnUpdate(film);
         log.info("Operation success: Movie is delete" + film.getName());
-        return filmStorage.update(film);
+        Film film1 = filmStorage.update(film);
+        return film1;
     }
 
     public Film delete(Film film) {

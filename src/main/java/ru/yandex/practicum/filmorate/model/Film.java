@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,7 +21,7 @@ public class Film {
     @JsonProperty("mpa")
     private MpaRating mpaRating;
     @JsonProperty("genres")
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
 
     public void getNextId() {
         id = count++;

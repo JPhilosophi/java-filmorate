@@ -35,8 +35,7 @@ public class FilmController {
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
-        filmService.update(film);
-        return film;
+        return filmService.update(film);
     }
 
     @GetMapping("/popular")

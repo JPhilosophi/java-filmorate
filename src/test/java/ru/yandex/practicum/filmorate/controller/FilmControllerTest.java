@@ -1,23 +1,29 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import ru.yandex.practicum.filmorate.exeption.BadRequestException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FilmControllerTest {
     private final Film film = new Film();
-    private final InMemoryFilmStorage filmStorage;
+    @Autowired
+    @Qualifier("filmDbStorage")
+    private FilmStorage filmStorage;
 
-    public FilmControllerTest(InMemoryFilmStorage filmStorage) {
-        this.filmStorage = filmStorage;
-    }
 
     @Test
     public void successCreateFilm() {
@@ -85,5 +91,22 @@ public class FilmControllerTest {
         film.setDuration(-140);
         film.setDescription("some film 2");
         assertThrows(BadRequestException.class, () -> filmStorage.update(film));
+    }
+
+    @Test
+    public void shouldReturnErrorNotFound2() {
+        Genre genre1 = new Genre();
+        Genre genre2 = new Genre();
+        Genre genre3 = new Genre();
+        genre1.setId(1);
+        genre2.setId(2);
+        genre3.setId(1);
+
+        List<Genre> genreList = new ArrayList<>();
+        genreList.add(genre1);
+        genreList.add(genre2);
+        genreList.add(genre3);
+        Set<Genre> genres = new HashSet<>(genreList);
+        assertEquals(2, genres.size());
     }
 }
