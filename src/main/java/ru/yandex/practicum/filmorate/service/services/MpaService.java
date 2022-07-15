@@ -5,14 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.model.MpaRating;
-import ru.yandex.practicum.filmorate.service.interfaces.MpaInterface;
 import ru.yandex.practicum.filmorate.storage.db_storage.MpaDbStorage;
 
 import java.util.List;
 
 @Slf4j
 @Service
-public class MpaService implements MpaInterface {
+public class MpaService implements ru.yandex.practicum.filmorate.service.interfaces.IMpaService {
     private final MpaDbStorage mpaDbStorage;
 
     @Autowired
@@ -20,6 +19,7 @@ public class MpaService implements MpaInterface {
         this.mpaDbStorage = mpaDbStorage;
     }
 
+    @Override
     public MpaRating getById (Integer id) {
         if (id < 0) {
             log.error("Not found mpa with " + id);
@@ -31,6 +31,7 @@ public class MpaService implements MpaInterface {
         return mpaDbStorage.getMpaById(id);
     }
 
+    @Override
     public List<MpaRating> getAll(){
         return mpaDbStorage.getAll();
     }

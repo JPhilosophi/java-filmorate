@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.model.MpaRating;
 
 import java.util.List;
 
-public interface MpaInterface {
+public interface IMpaService {
 
     MpaRating getById (Integer id);
 

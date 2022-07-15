@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.MpaRating;
-import ru.yandex.practicum.filmorate.service.interfaces.MpaInterface;
-import ru.yandex.practicum.filmorate.service.services.MpaService;
+import ru.yandex.practicum.filmorate.service.interfaces.IMpaService;
 
 import java.util.List;
 
@@ -17,20 +16,20 @@ import java.util.List;
 @Validated
 @RequestMapping("/mpa")
 public class MpaRatingController {
-    private final MpaInterface mpaInterface;
+    private final IMpaService IMpaService;
 
     @Autowired
-    public MpaRatingController(MpaInterface mpaInterface) {
-        this.mpaInterface = mpaInterface;
+    public MpaRatingController(IMpaService IMpaService) {
+        this.IMpaService = IMpaService;
     }
 
     @GetMapping("/{id}")
     public MpaRating getById (@PathVariable Integer id) {
-        return mpaInterface.getById(id);
+        return IMpaService.getById(id);
     }
 
     @GetMapping
     public List<MpaRating> getAll () {
-        return mpaInterface.getAll();
+        return IMpaService.getAll();
     }
 }

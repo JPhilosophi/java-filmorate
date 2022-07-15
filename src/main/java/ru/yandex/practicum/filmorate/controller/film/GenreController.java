@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.service.interfaces.GenreInterface;
-import ru.yandex.practicum.filmorate.service.services.GenreService;
+import ru.yandex.practicum.filmorate.service.interfaces.IGenreService;
 
 import java.util.List;
 
@@ -16,10 +15,10 @@ import java.util.List;
 @Validated
 @RequestMapping("/genres")
 public class GenreController {
-    private final GenreInterface genreInterface;
+    private final IGenreService genreInterface;
 
     @Autowired
-    public GenreController(GenreInterface genreInterface) {
+    public GenreController(IGenreService genreInterface) {
         this.genreInterface = genreInterface;
     }
 

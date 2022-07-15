@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeption.BadRequestException;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.interfaces.UserInterface;
 import ru.yandex.practicum.filmorate.storage.interfaces.UserStorage;
 
 import java.time.LocalDate;
@@ -17,7 +16,7 @@ import java.util.Objects;
 
 @Slf4j
 @Service
-public class UserService implements UserInterface {
+public class UserService implements ru.yandex.practicum.filmorate.service.interfaces.IUserService {
     private final UserStorage userStorage;
 
     @Autowired

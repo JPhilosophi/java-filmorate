@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.List;
 
-public interface GenreInterface {
+public interface IGenreService {
 
     Genre getById (Integer id);
 
