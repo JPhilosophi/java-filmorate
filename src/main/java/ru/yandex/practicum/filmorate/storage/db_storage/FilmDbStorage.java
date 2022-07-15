@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.db_storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,20 +6,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmRowMapper;
-import ru.yandex.practicum.filmorate.mapper.UserRowMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MpaRating;
+import ru.yandex.practicum.filmorate.storage.interfaces.FilmStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component("filmDbStorage")
-public class FilmDbStorage implements FilmStorage{
+public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -90,7 +91,7 @@ public class FilmDbStorage implements FilmStorage{
     }
 
     @Override
-    public Map<Integer, Film> getFilms() {
+    public Map<Integer, Film> getFilms(Integer count) {
         Map<Integer, Film> result = new HashMap<>();
         jdbcTemplate.query("SELECT F.ID, F.NAME, F.DESCRIPTION, F.RELEASE_DATE, F.DURATION, F.RATE, MR.ID AS MPA_ID, MR.MPA_RATING " +
                 "FROM FILMS F " +
@@ -114,6 +115,18 @@ public class FilmDbStorage implements FilmStorage{
             film.getGenres().add(genre);
             return null;
         });
+//        if (count == null) {
+//            result.values()
+//                    .stream()
+//                    .sorted(Comparator.comparing(Film::getRate))
+//                    .collect(Collectors.toList());
+//        } else {
+//            Map<Integer, Set<Integer>> result1 = new TreeMap<>(getLikes());
+//            return (Map<Integer, Film>) result.keySet().stream()
+//                    .map(getFilms(null)::get)
+//                    .limit(Objects.requireNonNullElse(count, 10))
+//                    .collect(Collectors.toList());
+//        }
         return result;
     }
 

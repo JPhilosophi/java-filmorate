@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeption.BadRequestException;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.service.interfaces.UserInterface;
+import ru.yandex.practicum.filmorate.storage.interfaces.UserStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 @Slf4j
 @Service
-public class UserService {
+public class UserService implements UserInterface {
     private final UserStorage userStorage;
 
     @Autowired
@@ -24,33 +25,39 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
+    @Override
     public User create(User user) {
         checkingUserOnCreate(user);
         log.info("Operation success: Created new user" + user.getLogin());
         return userStorage.create(user);
     }
 
+    @Override
     public User update(User user) {
         checkingUserForUpdate(user);
         log.info("Operation success: User updated " + user.getLogin());
         return userStorage.update(user);
     }
 
+    @Override
     public User delete(User user) {
         checkingUserExist(user.getId());
         log.info("Operation success: User deleted " + user.getLogin());
         return userStorage.delete(user);
     }
 
+    @Override
     public Collection<User> getUsers() {
         return userStorage.getUsers().values();
     }
 
+    @Override
     public User getUserById(int userId) {
         checkingUserExist(userId);
         return userStorage.getUsers().get(userId);
     }
 
+    @Override
     public void addFriend(Integer userId, Integer friendId) {
         checkingUserExist(userId);
         checkingUserExist(friendId);
@@ -58,17 +65,20 @@ public class UserService {
         userStorage.addFriend(userId, friendId);
     }
 
+    @Override
     public List<User> getFriends(Integer userId) {
         checkingUserExist(userId);
         return userStorage.getFriends(userId);
     }
 
+    @Override
     public List<User> getCommonFriendList(Integer userId, Integer otherId) {
         checkingUserExist(userId);
         checkingUserExist(otherId);
         return userStorage.getCommonFriendList(userId, otherId);
     }
 
+    @Override
     public void deleteFriend(Integer userId, Integer friendId) {
         checkingUserExist(userId);
         checkingUserExist(friendId);

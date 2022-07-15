@@ -1,17 +1,18 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.model.MpaRating;
-import ru.yandex.practicum.filmorate.storage.MpaDbStorage;
+import ru.yandex.practicum.filmorate.service.interfaces.MpaInterface;
+import ru.yandex.practicum.filmorate.storage.db_storage.MpaDbStorage;
 
 import java.util.List;
 
 @Slf4j
 @Service
-public class MpaService {
+public class MpaService implements MpaInterface {
     private final MpaDbStorage mpaDbStorage;
 
     @Autowired

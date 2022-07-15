@@ -1,13 +1,15 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeption.BadRequestException;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.service.interfaces.FilmInterface;
+import ru.yandex.practicum.filmorate.storage.interfaces.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class FilmService {
+public class FilmService implements FilmInterface {
     private final FilmStorage filmStorage;
     private final LocalDate TIME = LocalDate.of(1895, 12, 28);
 
@@ -43,26 +45,28 @@ public class FilmService {
     }
 
     public Collection<Film> get() {
-        return filmStorage.getFilms().values();
+        return filmStorage.getFilms(null).values();
     }
 
     public List<Film> getPopular(Integer count) {
         if (count == null) {
-            return filmStorage.getFilms().values()
+            return filmStorage.getFilms(null).values()
                     .stream()
                     .sorted(Comparator.comparing(Film::getRate))
                     .collect(Collectors.toList());
         }
         Map<Integer, Set<Integer>> result = new TreeMap<>(filmStorage.getLikes());
         return result.keySet().stream()
-                .map(filmStorage.getFilms()::get)
+                .map(filmStorage.getFilms(null)::get)
                 .limit(Objects.requireNonNullElse(count, 10))
                 .collect(Collectors.toList());
+//        List<Film> result = filmStorage.getFilms(count).values().stream().collect(Collectors.toList());
+//        return result;
     }
 
     public Film getById(Integer filmId) {
         checkingAvailabilityFilm(filmId);
-        return filmStorage.getFilms().get(filmId);
+        return filmStorage.getFilms(null).get(filmId);
     }
 
     public void addLike(Integer filmId, Integer userId) {
@@ -87,13 +91,13 @@ public class FilmService {
     }
 
     private void checkingFilmOnUpdate(Film film) {
-        if (!filmStorage.getFilms().containsKey(film.getId())) {
+        if (!filmStorage.getFilms(null).containsKey(film.getId())) {
             throw new NotFoundException(" movie with " + film.getId() + " is not in the database");
         }
     }
 
     private void checkingAvailabilityFilm(Integer filmId) {
-        if (!filmStorage.getFilms().containsKey(filmId)) {
+        if (!filmStorage.getFilms(null).containsKey(filmId)) {
             throw new NotFoundException( " movie with " + filmId + " is not in the database");
         }
     }

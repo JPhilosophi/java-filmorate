@@ -1,5 +1,6 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.interfaces;
 
+import org.springframework.lang.Nullable;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Map;
@@ -12,7 +13,7 @@ public interface FilmStorage {
 
     Film delete (Film film);
 
-    Map<Integer, Film> getFilms();
+    Map<Integer, Film> getFilms(@Nullable Integer count);
 
     Map<Integer, Set<Integer>> getLikes();
 
