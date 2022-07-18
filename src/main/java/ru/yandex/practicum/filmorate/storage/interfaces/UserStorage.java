@@ -1,9 +1,8 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.interfaces;
 
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface UserStorage {
@@ -17,4 +16,10 @@ public interface UserStorage {
     Map<Integer, User> getUsers();
 
     void addFriend(Integer id, Integer friendId);
+
+    List<User> getFriends(Integer userId);
+
+    List<User> getCommonFriendList(Integer userId, Integer otherId);
+
+    void deleteFriend(Integer userId, Integer friendId);
 }

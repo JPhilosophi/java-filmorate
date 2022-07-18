@@ -1,27 +1,37 @@
 package ru.yandex.practicum.filmorate.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.DurationDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.DurationSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import java.time.Duration;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class Film {
     private static int count = 1;
     private int id;
     @NotBlank
+    @NotNull
     private String name;
+    @NotNull
     private String description;
+    @DateTimeFormat
     private LocalDate releaseDate;
-    @JsonSerialize(using = DurationSerializer.class)
-    @JsonDeserialize(using = DurationDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
-    private Duration duration;
+    @Min(1)
+    private Integer duration;
     private int rate;
+    @JsonProperty("mpa")
+    @NotNull
+    private MpaRating mpaRating;
+    @JsonProperty("genres")
+    private List<Genre> genres = new ArrayList<>();
+
+    public void getNextId() {
+        id = count++;
+    }
 }

@@ -1,12 +1,13 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeption.BadRequestException;
 import ru.yandex.practicum.filmorate.exeption.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.interfaces.UserStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -15,63 +16,72 @@ import java.util.Objects;
 
 @Slf4j
 @Service
-public class UserService {
-    private final InMemoryUserStorage inMemoryUserStorage;
+public class UserService implements ru.yandex.practicum.filmorate.service.interfaces.IUserService {
+    private final UserStorage userStorage;
 
     @Autowired
-    public UserService(InMemoryUserStorage inMemoryUserStorage) {
-        this.inMemoryUserStorage = inMemoryUserStorage;
+    public UserService(@Qualifier("userDbStorage")UserStorage userStorage) {
+        this.userStorage = userStorage;
     }
 
+    @Override
     public User create(User user) {
         checkingUserOnCreate(user);
         log.info("Operation success: Created new user" + user.getLogin());
-        return inMemoryUserStorage.create(user);
+        return userStorage.create(user);
     }
 
+    @Override
     public User update(User user) {
         checkingUserForUpdate(user);
         log.info("Operation success: User updated " + user.getLogin());
-        return inMemoryUserStorage.update(user);
+        return userStorage.update(user);
     }
 
+    @Override
     public User delete(User user) {
         checkingUserExist(user.getId());
         log.info("Operation success: User deleted " + user.getLogin());
-        return inMemoryUserStorage.delete(user);
+        return userStorage.delete(user);
     }
 
+    @Override
     public Collection<User> getUsers() {
-        return inMemoryUserStorage.getUsers().values();
+        return userStorage.getUsers().values();
     }
 
+    @Override
     public User getUserById(int userId) {
         checkingUserExist(userId);
-        return inMemoryUserStorage.getUsers().get(userId);
+        return userStorage.getUsers().get(userId);
     }
 
+    @Override
     public void addFriend(Integer userId, Integer friendId) {
         checkingUserExist(userId);
         checkingUserExist(friendId);
         checkingId(userId, friendId);
-        inMemoryUserStorage.addFriend(userId, friendId);
+        userStorage.addFriend(userId, friendId);
     }
 
+    @Override
     public List<User> getFriends(Integer userId) {
         checkingUserExist(userId);
-        return inMemoryUserStorage.getFriends(userId);
+        return userStorage.getFriends(userId);
     }
 
+    @Override
     public List<User> getCommonFriendList(Integer userId, Integer otherId) {
         checkingUserExist(userId);
         checkingUserExist(otherId);
-        return inMemoryUserStorage.getCommonFriendList(userId, otherId);
+        return userStorage.getCommonFriendList(userId, otherId);
     }
 
+    @Override
     public void deleteFriend(Integer userId, Integer friendId) {
         checkingUserExist(userId);
         checkingUserExist(friendId);
-        inMemoryUserStorage.deleteFriend(userId, friendId);
+        userStorage.deleteFriend(userId, friendId);
     }
 
     private void checkingUserOnCreate(User user) {
@@ -84,14 +94,14 @@ public class UserService {
     }
 
     private void checkingUserForUpdate(User user) {
-        if (!inMemoryUserStorage.getUsers().containsKey(user.getId())) {
+        if (!userStorage.getUsers().containsKey(user.getId())) {
             log.error("Not found user" + " " + user.getId());
             throw new NotFoundException("Error: can't found user" + user.getId());
         }
     }
 
     private void checkingUserExist(Integer id) {
-        if (!inMemoryUserStorage.getUsers().containsKey(id)) {
+        if (!userStorage.getUsers().containsKey(id)) {
             log.error("Can't found user with " + " " + id);
             throw new NotFoundException("Can't found user with " +  id.toString());
         }

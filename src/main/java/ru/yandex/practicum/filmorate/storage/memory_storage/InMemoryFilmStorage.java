@@ -1,7 +1,9 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.memory_storage;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.interfaces.FilmStorage;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-@Component
+@Component("inMemoryFilmStorage")
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private final Map<Integer, Set<Integer>> likes = new HashMap<>();
@@ -35,7 +37,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Map<Integer, Film> getFilms() {
+    public Map<Integer, Film> getFilms(@Nullable Integer count) {
         return films;
     }
 
@@ -44,12 +46,14 @@ public class InMemoryFilmStorage implements FilmStorage {
         return likes;
     }
 
+    @Override
     public void addLike(Integer filmId, Integer userId) {
         if (!likes.containsKey(filmId)) {
            likes.put(filmId, new HashSet<>());
        } likes.get(filmId).add(userId);
     }
 
+    @Override
     public void deleteLike(Integer filmId, Integer userId) {
         likes.get(filmId).remove(userId);
     }
